@@ -11,9 +11,17 @@ conda env create --prefix ./.conda --file environment.yml
 conda activate ./.conda
 ```
 
-编辑 `sync_config.json`，将 `expected_athlete_id` 替换为自己的 Strava 个人资料 URL 中的数字 ID，将 `start` 替换为实际开始日期；按需调整运动类型、室内外和结束日期。模板不能直接用于上传。
+推荐下载 GitHub Release 中的 `AppleFit2Strava-版本-agent-install.zip`，把压缩包交给支持本地执行和技能安装的 agent，说“请安装这个 skill”。安装时无需账号或健康数据；首次同步时再配置。
 
-将解压后的健康导出放入 `apple_health_export/`，路线放入 `apple_health_export/workout-routes/`。不要提交个人配置修改或这些目录中的数据。仓库忽略数据文件，但已跟踪的配置仍需自行保持为模板。
+直接使用源码时，用自己的 Strava athlete ID 和起始日期创建项目配置：
+
+```sh
+python setup_project.py --project . --athlete-id 你的数字ID --start YYYY-MM-DD --sport all --location all
+```
+
+`sync_config.example.json` 仅说明格式，不是有效账号配置；程序创建的 `sync_config.json` 已被 Git 忽略。已初始化项目不重复运行 setup_project。
+
+将解压后的健康导出放入 `apple_health_export/`，路线放入 `apple_health_export/workout-routes/`。不要提交个人配置或这些目录中的数据；仓库已忽略这些本机文件。
 
 完整 Skill 位于 `skills/apple-health-strava-sync/`。将该目录安装到宿主的技能目录，或让宿主加载其中的 `SKILL.md`，并明确指定项目路径。宿主需提供本地 Python、已登录浏览器操作、本地文件上传和用户确认能力。
 
@@ -130,3 +138,9 @@ conda activate ./.conda
 保留并迁移项目 sync_config.json、state/ 和所需 exports/；同一账号的清单按运动类型与 UTC 起止时间识别记录。更换项目绝对路径后重新 prepare、云端检查及确认，不复用旧路径绑定的审核。不同账号使用不同项目；新用户通过 Skill 内 setup_project.py 创建配置。详见 Skill 的 references/harness.md。Python 使用 3.10+，所需 IANA 时区数据库不可用时先安装 tzdata 或系统时区数据。
 
 测试中的账号、活动链接、坐标和运动样本均为合成测试数据，不是个人活动记录。
+
+## 构建安装包
+
+提交改动并保持项目版与 Skill 内脚本一致后，运行 `python build_release.py`。构建仅使用当前 Git 提交，输出 `dist/AppleFit2Strava-版本-agent-install.zip`。包内 README.md 来自 packaging/README_AGENT.md，原源码说明保留为 README_USER.md；release.json 记录版本、源提交、文件清单和字节数。检查采用 ZIP CRC 和逐文件内容比对，不使用 SHA256。
+
+发布时上传这个专用 ZIP；GitHub 自动生成的 Source code 压缩包是源码快照，不包含构建时生成的 agent 安装入口替换。

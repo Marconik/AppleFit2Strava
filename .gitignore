@@ -31,3 +31,7 @@ input/**
 export.xml
 export_cda.xml
 导出.xml
+
+# Generated installation archives and private project configuration
+dist/
+sync_config.json

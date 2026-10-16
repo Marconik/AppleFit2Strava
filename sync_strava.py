@@ -172,7 +172,7 @@ def main():
     check = actions.add_parser("cloud-check", help="只读比对浏览器观测与本地待上传活动")
     check.add_argument("--manifest", required=True)
     check.add_argument("--observations", required=True)
-    check.add_argument("--output", required=True, help="新 JSON 报告路径，同时生成 CSV")
+    check.add_argument("--output", required=True, help="新的内部 JSON 报告路径；确认列表由对话展示")
     review = actions.add_parser("review", help="完整云端查重后生成用户确认清单")
     review.add_argument("--manifest", required=True)
     review.add_argument("--observations", required=True)

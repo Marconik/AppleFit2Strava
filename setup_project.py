@@ -25,6 +25,8 @@ def initialize(project, athlete_id, start, end=None, sport='all', location='all'
     with target.open('x', encoding='utf-8') as stream:
         json.dump(cfg, stream, ensure_ascii=False, indent=2)
         stream.write('\n')
+    for folder in (str(Path(input_directory) / 'workout-routes'), 'state', 'exports'):
+        (project / folder).mkdir(parents=True, exist_ok=True)
     return {'project': str(project), 'config': str(target), 'input_directory': str(project / input_directory)}
 
 

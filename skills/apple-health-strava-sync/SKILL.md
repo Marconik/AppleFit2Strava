@@ -5,9 +5,13 @@ description: 通过宿主提供的本地 Python 和已登录浏览器，将 Appl
 
 # Apple 健康同步到 Strava
 
+## 安装与首次使用
+
+仅安装本 Skill 时，复制完整目录（包含 scripts、references 和 VERSION），并验证本地命令；不要求浏览器登录、账号、日期或健康数据，不运行 prepare/review/upload。首次同步再按 references/harness.md 初始化独立持久项目，配置和个人数据放在项目目录，不能写进 Skill 或临时解压目录。配置示例不代表已初始化项目。
+
 ## 宿主与项目
 
-不依赖特定 harness、浏览器品牌、操作系统或工具名称。首次执行先读 [references/harness.md](references/harness.md)，确认本地执行、页面读取/交互、本地文件上传和用户确认能力；用宿主提供且允许的工具实现。仅编辑 Skill 或本地预览不需要浏览器。
+不依赖特定 harness、浏览器品牌、操作系统或工具名称。实际同步前先读 [references/harness.md](references/harness.md)，确认本地执行、页面读取/交互、本地文件上传和用户确认能力；用宿主提供且允许的工具实现。仅编辑 Skill 或本地预览不需要浏览器。
 
 本 Skill 自带 scripts/ 下的完整 Python 工具。项目与 Skill 可以分开放置；始终显式传 --project，避免把用户数据写到 Skill 安装目录。
 

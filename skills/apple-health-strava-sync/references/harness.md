@@ -12,6 +12,12 @@
 
 浏览器工具、桌面工具或宿主允许的 Playwright/Selenium 等均可作为实现方式，不额外安装驱动或启动独立自动化以绕过宿主限制。先读当前工具说明；复用已授权会话，若没有会话则由用户完成登录。不要提取 cookies、登录令牌或把凭据写入观测文件。只有搜索/网页抓取能力不足以完成上传。
 
+## 安装
+
+安装由宿主自己的 Skill 机制处理；release 根目录 README.md 是给 agent 的安装入口，install_skill.py 可将完整技能安装到宿主确定的目录。不要写死宿主目录、浏览器或工具名。安装不需要 Strava 账号、日期或健康数据；这些只在首次同步时取得。
+
+安装后核对 VERSION、SKILL.md、scripts/、references/，用实际 Python 运行 scripts/sync_strava.py --help 和 sports；核实宿主的发现/重新加载要求。不将仅复制文件说成已被宿主加载。
+
 ## 开始运行
 
 1. 按 SKILL.md 解析项目位置，读取配置并选择实际解释器。优先项目现有 Conda 环境；各系统的解释器位置不同，以发现结果为准，不假定 bin/python。不可用时再使用宿主配置的 Python。
@@ -24,13 +30,15 @@
 
 ## 新项目
 
+首次同步时优先采用用户指定的持久项目目录；未指定则在宿主允许的持久工作区新建独立项目目录，向用户说明位置。不要将临时附件/解压目录或 Skill 安装目录用作数据项目。账号从用户提供的资料或授权访问的已登录 Strava 页面核对；日期范围缺失时集中询问，不使用示例值。
+
 用已选择的 Python 执行 Skill 内 scripts/setup_project.py，参数如下（使用真实路径和用户提供的值）：
 
 ```text
 setup_project.py --project 项目路径 --athlete-id 实际账号ID --start YYYY-MM-DD --sport all --location all
 ```
 
-脚本创建项目及 sync_config.json，默认 input_directory 为 apple_health_export、browser 为 auto；可指定 --end 和 --input-directory。已有配置或上传清单时拒绝初始化，避免覆盖账号和历史。将解压的健康导出复制到输入目录即可。现有项目直接使用，不初始化、不重置清单。
+脚本创建项目及 sync_config.json，默认 input_directory 为 apple_health_export、browser 为 auto；可指定 --end 和 --input-directory。已有配置或上传清单时拒绝初始化，避免覆盖账号和历史。同时创建输入目录的 workout-routes/、state/ 和 exports/。将解压的健康导出复制到输入目录即可。现有项目直接使用，不初始化、不重置清单。初始化后可在已安装 Skill 的 local.json 中记录实际项目绝对路径供以后定位；不得把该文件重新打包分享。sync_config.example.json 只是示例，不作为项目配置读取。
 
 实际操作入口的参数数组为 `[Python, Skill目录/scripts/sync_strava.py, "--project", 项目路径, 子命令, ...]`。例如依次 prepare --preview、prepare、queue；之后完整采集云端并 review，展示所有疑似项和类型/地点信息。
 
