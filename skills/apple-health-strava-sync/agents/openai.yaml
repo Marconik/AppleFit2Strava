@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple 健康同步到 Strava"
+  short_description: "跨宿主同步多种运动，核对重合与地点，经用户确认后上传并维护清单"
+  default_prompt: "使用 $apple-health-strava-sync，按我指定的运动类型和日期检查待上传记录，列出疑似重合项与地点信息，等我确认后再上传并更新清单。"

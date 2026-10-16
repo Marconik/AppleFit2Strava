@@ -1,0 +1,33 @@
+# Local runtime and machine metadata
+.conda/
+__pycache__/
+*.py[cod]
+.DS_Store
+.env
+.env.*
+!.env.example
+local.json
+
+# Keep only the directory skeleton for private data.
+apple_health_export/**
+!apple_health_export/**/
+!apple_health_export/**/.gitkeep
+exports/**
+!exports/**/
+!exports/**/.gitkeep
+state/**
+!state/**/
+!state/**/.gitkeep
+input/**
+!input/**/
+!input/**/.gitkeep
+
+# Block accidental copies outside the usual data directories.
+*.zip
+*.tcx
+*.gpx
+*.sqlite*
+*.db
+export.xml
+export_cda.xml
+导出.xml

@@ -1,0 +1,9 @@
+{
+  "input_directory": "apple_health_export",
+  "sport": "all",
+  "location": "all",
+  "start": "YYYY-MM-DD",
+  "end": null,
+  "expected_athlete_id": "YOUR_STRAVA_ATHLETE_ID",
+  "browser": "auto"
+}
