@@ -141,6 +141,6 @@ python setup_project.py --project . --athlete-id 你的数字ID --start YYYY-MM-
 
 ## 构建安装包
 
-提交改动并保持项目版与 Skill 内脚本一致后，运行 `python build_release.py`。构建仅使用当前 Git 提交，输出 `dist/AppleFit2Strava-版本-agent-install.zip`。包内 README.md 来自 packaging/README_AGENT.md，原源码说明保留为 README_USER.md；release.json 记录版本、源提交、文件清单和字节数。检查采用 ZIP CRC 和逐文件内容比对，不使用 SHA256。
+提交改动并保持项目版与 Skill 内脚本一致后，运行 `python build_release.py`。构建仅使用当前 Git 提交，输出 `dist/AppleFit2Strava-版本-agent-install.zip`。包内 README.md 来自 packaging/README_AGENT.md，完整功能说明通过包内 README 的项目仓库链接查看，不额外附带 README_USER.md；release.json 记录版本、源提交、文件清单和字节数。检查采用 ZIP CRC 和逐文件内容比对，不使用 SHA256。
 
 发布时上传这个专用 ZIP；GitHub 自动生成的 Source code 压缩包是源码快照，不包含构建时生成的 agent 安装入口替换。

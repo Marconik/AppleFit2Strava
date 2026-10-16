@@ -86,7 +86,7 @@ class ReleaseTests(unittest.TestCase):
         with zipfile.ZipFile(BytesIO(content)) as archive:
             prefix = 'AppleFit2Strava-' + version + '/'
             self.assertEqual(archive.read(prefix + 'README.md'), b'agent instructions')
-            self.assertEqual(archive.read(prefix + 'README_USER.md'), b'human instructions')
+            self.assertNotIn(prefix + 'README_USER.md', archive.namelist())
             self.assertEqual(archive.read(prefix + 'apple_health_export/workout-routes/.gitkeep'), b'')
             meta = json.loads(archive.read(prefix + 'release.json'))
             for item in meta['files']:

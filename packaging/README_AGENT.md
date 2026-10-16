@@ -25,4 +25,4 @@
 
 简洁报告版本、安装位置、验证结果和宿主要求的加载步骤。说明下一步把解压的健康导出放入数据项目的 `apple_health_export/`，并说“使用 apple-health-strava-sync，同步某日期范围的某种运动，先查重等我确认”。
 
-完整功能说明见 `README_USER.md`。安装过程不需要访问 GitHub，也不需要 Git。
+项目地址：[AppleFit2Strava](https://github.com/Marconik/AppleFit2Strava)。完整功能说明见项目仓库。安装过程不需要访问 GitHub，也不需要 Git。

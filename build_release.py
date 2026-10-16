@@ -31,7 +31,6 @@ def assemble(entries, commit):
             if path.name != '.gitkeep' or entries[name]:
                 raise ValueError('Only empty directory placeholders may ship: ' + name)
     output = dict(entries)
-    output['README_USER.md'] = entries['README.md']
     output['README.md'] = entries['packaging/README_AGENT.md']
     output['release.json'] = (json.dumps({
         'format': 1, 'version': version, 'source_commit': commit,
