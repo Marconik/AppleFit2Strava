@@ -1,31 +1,51 @@
-# Apple 健康 → Strava
+# Apple 运动数据 → Strava 活动
 
-本地免费转换工具。默认读取本项目 `apple_health_export/导出.xml`，路线读取同目录的 `workout-routes/`；不使用 `export_cda.xml`。原始文件保持不变。
+> **起因**
+>
+> 半年没打开strava，发现很早就把Apple Fitness的同步关掉了，同时我的Apple Watch始终在记录运动数据，这些运动数据有各种项目，有大有小，还有不少实际上和已有的数据重复了（比如一部分骑行数据，码表上传了一份数据但是不包含心率，而手表也记录了一份有心率但是运动轨迹和速度不准确的数据）
+>
+> 希望利用工具把Apple Watch记录的数据分类、分时段、无重复地上传到Strava活动列表里面
 
-发布副本不包含任何真实健康数据、轨迹、账号、上传记录或浏览器观测。数据目录及原有子目录通过 `.gitkeep` 保留为空；本机 Conda 环境、缓存和历史备份内容不发布。
+------
+
+> [!NOTE]
+>
+> 本项目仅限于Apple Fitness导出的数据上传到Strava平台，数据需要尽量保留Apple Fitness直接导出的结构（不建议重命名或者移动相对位置）。由于Strava的限制，程序只能通过浏览器上传、检查等操作。请关注Strava账号的限制（如免费版一次只能上传15条数据、24小时内只能上传30条数据），同时如果程序上传了错误的数据可能需要手动删除或者修改。
+>
+> 本项目适合大规模的数据上传，如需同步数据请在Strava内打开对应开关（自动上传Apple健康数据），如需同步近90天内的少量数据请在Strava内的健康应用程序直接选择对应记录即可。
+>
+> 由于目前还没有对语言进行适配，默认健康APP和Strava都是中文的界面，后续可能会对语言遇到的问题进行修复。
+>
+> 程序目前在macOS 27.0.1和Edge浏览器上运行没有出现问题，如果担心出现安全问题请一定要让Agent或者杀毒软件检查一遍程序的功能漏洞。
 
 ## 首次使用
 
-```sh
-conda env create --prefix ./.conda --file environment.yml
-conda activate ./.conda
+#### 准备工作：
+
+- Apple Fitness的运动数据都保存在Apple健康里面，需要在iPhone的健康APP内导出运动健康数据（APP内右上角->导出所有健康数据->分享到电脑）。导出的压缩包完成解压之后即可呈现项目框架内`apple_health_export`一样的结构。拖入覆盖即可。
+- 符合条件的 harness 需要能够：
+  - 执行本地 Python，读写项目文件和持久清单
+  - 操作已登录 Strava 的浏览器，读取页面、上传本地文件
+  - 能够给用户提供用来确认操作的输入端口
+
+- harness调用的浏览器可以较稳定地登录Strava，以及完成文件上传、下载等步骤。
+
+#### 安装使用：
+
+- 进入到[Releases](https://github.com/Marconik/AppleFit2Strava/releases)页面，下载安装包（不用解压）
+
+- 把安装包给Agent，然后向Agent下达命令：
+
+```
+请安装这个skill
 ```
 
-推荐下载 GitHub Release 中的 `AppleFit2Strava-版本-agent-install.zip`，把压缩包交给支持本地执行和技能安装的 agent，说“请安装这个 skill”。安装时无需账号或健康数据；首次同步时再配置。
+- Agent安装完成之后可能会直接输出程序的使用方法，如果没有的话可以询问Agent
+- 使用方法示例：
 
-直接使用源码时，用自己的 Strava athlete ID 和起始日期创建项目配置：
-
-```sh
-python setup_project.py --project . --athlete-id 你的数字ID --start YYYY-MM-DD --sport all --location all
 ```
-
-`sync_config.example.json` 仅说明格式，不是有效账号配置；程序创建的 `sync_config.json` 已被 Git 忽略。已初始化项目不重复运行 setup_project。
-
-将解压后的健康导出放入 `apple_health_export/`，路线放入 `apple_health_export/workout-routes/`。不要提交个人配置或这些目录中的数据；仓库已忽略这些本机文件。
-
-完整 Skill 位于 `skills/apple-health-strava-sync/`。将该目录安装到宿主的技能目录，或让宿主加载其中的 `SKILL.md`，并明确指定项目路径。宿主需提供本地 Python、已登录浏览器操作、本地文件上传和用户确认能力。
-
-独立本地转换命令默认筛选户外骑行，日期范围为 2000-01-01 至 2099-12-31；Skill 使用你填写的配置及本次指令。
+使用 $apple-health-strava-sync，上传2026-9-10到2026-10-14的户外步行运动数据，查重完成待我确认后上传
+```
 
 ## 通用 Skill 上传
 
@@ -138,9 +158,3 @@ python setup_project.py --project . --athlete-id 你的数字ID --start YYYY-MM-
 保留并迁移项目 sync_config.json、state/ 和所需 exports/；同一账号的清单按运动类型与 UTC 起止时间识别记录。更换项目绝对路径后重新 prepare、云端检查及确认，不复用旧路径绑定的审核。不同账号使用不同项目；新用户通过 Skill 内 setup_project.py 创建配置。详见 Skill 的 references/harness.md。Python 使用 3.10+，所需 IANA 时区数据库不可用时先安装 tzdata 或系统时区数据。
 
 测试中的账号、活动链接、坐标和运动样本均为合成测试数据，不是个人活动记录。
-
-## 构建安装包
-
-提交改动并保持项目版与 Skill 内脚本一致后，运行 `python build_release.py`。构建仅使用当前 Git 提交，输出 `dist/AppleFit2Strava-版本-agent-install.zip`。包内 README.md 来自 packaging/README_AGENT.md，完整功能说明通过包内 README 的项目仓库链接查看，不额外附带 README_USER.md；release.json 记录版本、源提交、文件清单和字节数。检查采用 ZIP CRC 和逐文件内容比对，不使用 SHA256。
-
-发布时上传这个专用 ZIP；GitHub 自动生成的 Source code 压缩包是源码快照，不包含构建时生成的 agent 安装入口替换。
